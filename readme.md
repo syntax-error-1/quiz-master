@@ -30,6 +30,4 @@ To run this project, follow these steps:
 8. At the end of the game, the winner will be announced.
 9. Enjoy playing the Quiz Master!
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+ 
