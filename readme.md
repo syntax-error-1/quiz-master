@@ -11,9 +11,9 @@ To run this project, follow these steps:
 1. Open the project folder in the terminal.
 2. Run the following commands:
 
-npm i
-node server.js
-node express.js
+`npm i` <br />
+`node server.js` <br />
+`node express.js` <br />
 
 
 3. Go to `localhost:3000/game.html` in your web browser to play the game.
