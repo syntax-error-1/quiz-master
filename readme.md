@@ -1,23 +1,35 @@
-## Quiz Master Mini Project  
+# Quiz Master Mini Project
 
-To run this project first open the project folder in terminal and run following comamnds: 
+## Description
 
-npm i 
+This is a mini project called Quiz Master, which allows users to play a quiz game. The project provides a web-based interface where users can answer questions and compete to win.
+
+## Installation
+
+To run this project, follow these steps:
+
+1. Open the project folder in the terminal.
+2. Run the following commands:
+
+npm i
 node server.js
 node express.js
 
-Go to localhost:3000/game.html to play
 
+3. Go to `localhost:3000/game.html` in your web browser to play the game.
 
+## How to Play
 
-# How to Play
+1. Enter your username in the input field provided.
+2. Click the "Start" button to begin the game.
+3. A question will appear on the screen.
+4. Type your answer in the input field provided.
+5. Click the "Submit" button to submit your answer.
+6. Wait for the result and the next question to appear.
+7. The game will continue until all questions have been answered.
+8. At the end of the game, the winner will be announced.
+9. Enjoy playing the Quiz Master!
 
-Enter your username in the input field.
-Click the "Start" button to begin the game.
-A question will appear on the screen.
-Type your answer in the input field provided.
-Click the "Submit" button to submit your answer.
-Wait for the result and the next question to appear.
-The game will continue until all questions have been answered.
-At the end of the game, the winner will be announced.
-Enjoy playing the Quiz Master!
+## License
+
+This project is licensed under the [MIT License](LICENSE).
