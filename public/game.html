@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quiz Master</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+
+
+        .how-to-play {
+            margin-top: 40px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #start {
+            margin-top: 10px;
+        }
+
+        #question {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #answer {
+            margin-top: 10px;
+        }
+
+        #submit {
+            margin-top: 10px;
+        }
+
+        #message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #timer {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4">Quiz Master</h1>
+        <div id="player-section">
+            <p>Enter your username:</p>
+            <input id="username" type="text" class="form-control">
+            <button id="start" class="btn btn-primary mt-3">Start</button>
+        </div>
+        <div id="game-section" style="display: none;">
+            <p id="question" class="mt-4"></p>
+            <input id="answer" type="text" class="form-control">
+            <button id="submit" class="btn btn-primary mt-3">Submit</button>
+            <p id="message" class="mt-3"></p>
+            <p id="timer" class="font-weight-bold"></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <div class="how-to-play">
+                        <h2>How to Play</h2>
+                        <p>Welcome to the Quiz Master! Here's how to play:</p>
+                        <ol>
+                            <li>Enter your username in the input field.</li>
+                            <li>Click the "Start" button to begin the game.</li>
+                            <li>A question will appear on the screen.</li>
+                            <li>Type your answer in the input field provided.</li>
+                            <li>Click the "Submit" button to submit your answer.</li>
+                            <li>Wait for the result and the next question to appear.</li>
+                            <li>The game will continue until all questions have been answered.</li>
+                            <li>At the end of the game, the winner will be announced.</li>
+                            <li>Enjoy playing the Quiz Master!</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket;
+        var username;
+        var timerInterval;
+        var timerSeconds = 10;
+        var waitingForNewQuestion = false;
+
+        document.getElementById('start').onclick = function () {
+            username = document.getElementById('username').value;
+            socket = io.connect('http://localhost:3001');
+            socket.emit('username', username);
+
+            document.getElementById('player-section').style.display = 'none';
+            document.getElementById('game-section').style.display = 'block';
+
+            socket.on('question', function (question) {
+                document.getElementById('question').innerText = question;
+                document.getElementById('answer').style.display = 'block';
+                document.getElementById('submit').style.display = 'block';
+                startTimer();
+                if (waitingForNewQuestion) {
+                    waitingForNewQuestion = false;
+                    document.getElementById('message').innerText = '';
+                }
+            });
+
+            socket.on('end', function (message) {
+                document.getElementById('message').innerText = message;
+                stopTimer();
+                document.getElementById('answer').style.display = 'none';
+                document.getElementById('submit').style.display = 'none';
+            });
+        };
+
+        document.getElementById('submit').onclick = function () {
+            var answer = document.getElementById('answer').value;
+            socket.emit('answer', { username: username, answer: answer });
+            document.getElementById('answer').value = '';
+            document.getElementById('answer').style.display = 'none';
+            document.getElementById('submit').style.display = 'none';
+            document.getElementById('message').innerText = 'Waiting for new question';
+            waitingForNewQuestion = true;
+        };
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            var timerElement = document.getElementById('timer');
+            timerSeconds = 10;
+            timerElement.innerText = 'Timer: ' + timerSeconds;
+            timerInterval = setInterval(function () {
+                timerSeconds--;
+                timerElement.innerText = 'Timer: ' + timerSeconds;
+                if (timerSeconds === 0) {
+                    stopTimer();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('timer').innerText = '';
+        }
+    </script>
+</body>
+
+</html>
